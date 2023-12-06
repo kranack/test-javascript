@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Javascript Test</title>
+  </head>
+  <body>
+    <div>
+      <p>Calculate the difference between 2 dates</p>
+      <form id="formCalculate">
+        <input type="datetime-local" name="date1" />
+        <input type="datetime-local" name="date2" />
+        <span id="result"></span>
+        <button id="calculateButton" type="button">Calculate</button>
+      </form>
+    </div>
+    <div>
+      <p>Pick a color for text and background</p>
+      <form id="formColors">
+        <label for="text">Text color</label>
+        <input type="color" name="text" />
+        <label for="background">Background color</label>
+        <input type="color" name="background" />
+        <button id="applyColors" type="button">Apply</button>
+      </form>
+    </div>
+    <script type="text/javascript">
+      // Calculate date difference
+      document.getElementById('calculateButton').addEventListener('click', (e) => {
+        const form = new FormData(document.getElementById('formCalculate'))
+
+        if (form.get('date1') === '' || form.get('date2') === '') return; // empty date
+
+        const date1 = new Date(form.get('date1'))
+        const date2 = new Date(form.get('date2'))
+
+        const diff = Math.abs(date1 - date2) // in ms
+        
+        // Computing diff
+        let seconds = diff / 1000
+        let minutes = Math.floor(seconds / 60)
+        let hours = Math.floor(minutes / 60)
+        let days = Math.floor(hours / 24)
+        let months = Math.floor(days / 30)
+        let years = Math.floor(days / 365)
+
+        years = (years).toFixed(0)
+        months = (months % 12).toFixed(0)
+        days = (days % 30).toFixed(0)
+        hours = (hours % 24).toFixed(0)
+        minutes = (minutes % 60).toFixed(0)
+        seconds = (seconds % 60).toFixed(0)
+
+        // There's an error when the dates are one year apart
+        // TODO: Fix the months calculation
+        document.getElementById('result').innerHTML = `${years}y ${months}m ${days}d ${hours}h ${minutes}m ${seconds}s`
+      })
+
+      // Set colors
+      document.getElementById('applyColors').addEventListener('click', (e) => {
+        const form = new FormData(document.getElementById('formColors'))
+
+        if (form.get('text') === form.get('background')) return; // same color
+
+        const body = document.getElementsByTagName('body').item(0)
+        body.style.backgroundColor = form.get('background')
+        body.style.color = form.get('text')
+      })
+    </script>
+  </body>
+</html>
